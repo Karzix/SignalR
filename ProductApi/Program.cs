@@ -16,30 +16,27 @@ builder.Services.AddCors(options =>
 {
     options.AddDefaultPolicy(builder =>
     {
-        builder.AllowAnyOrigin()
+        builder.SetIsOriginAllowed(origin => true)
                .AllowAnyHeader()
-               .AllowAnyMethod();
+               .AllowAnyMethod()
+               .AllowCredentials();
     });
 });
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+app.UseRouting();
 if (app.Environment.IsDevelopment())
 {
     app.UseDeveloperExceptionPage();
     app.UseSwagger();
     app.UseSwaggerUI();
 }
-app.MapHub<NotificationHub>("/notifications");
-app.UseHttpsRedirection();
-app.UseAuthorization();
-app.UseCors(builder =>
-{
-    builder
-    .AllowAnyOrigin()
-    .AllowAnyMethod()
-    .AllowAnyHeader();
-});
-app.MapControllers();
 
+app.UseHttpsRedirection();
+app.UseCors();
+app.UseAuthorization();
+app.UseHttpsRedirection();
+
+app.MapControllers();
+app.MapHub<NotificationHub>("/notifications");
 app.Run();

@@ -39,16 +39,16 @@ namespace ProductApi.Controllers
             // Gửi thông báo tới SignalR Hub
             var signalRTaskCompletionSource = new TaskCompletionSource<string>();
             string respone = "";
-            _hubConnection.On<string>("ReceiveMessage", (receivedMessage) =>
-            {
-                respone = receivedMessage;
-                if (receivedMessage.Contains(product.Name))
-                {
-                    
-                    signalRTaskCompletionSource.SetResult(receivedMessage);
-                }
-            });
-            await signalRTaskCompletionSource.Task;
+            //_hubConnection.On<string>("ReceiveMessage", (receivedMessage) =>
+            //{
+            //    respone = receivedMessage;
+            //    if (receivedMessage.Contains(product.Name))
+            //    {
+
+            //        signalRTaskCompletionSource.SetResult(receivedMessage);
+            //    }
+            //});
+            //await signalRTaskCompletionSource.Task;
             return Ok(new { status = signalRTaskCompletionSource.Task.Result });
         }
     }
