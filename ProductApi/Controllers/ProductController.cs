@@ -14,19 +14,19 @@ namespace ProductApi.Controllers
     public class ProductController : ControllerBase
     {
         private readonly IModel _channel;
-        private readonly HubConnection _hubConnection;
+        //private readonly HubConnection _hubConnection;
 
         public ProductController(IModel channel)
         {
             _channel = channel;
-            _hubConnection = new HubConnectionBuilder()
-                .WithUrl("https://localhost:7020/notifications")
-                .Build();
-            _hubConnection.StartAsync().Wait();
+            //_hubConnection = new HubConnectionBuilder()
+            //    .WithUrl("https://localhost:7020/notifications")
+            //    .Build();
+            //_hubConnection.StartAsync().Wait();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post([FromBody] Product product)
+        public IActionResult Post(Product product)
         {
             var message = JsonSerializer.Serialize(product);
             var body = Encoding.UTF8.GetBytes(message);
@@ -38,7 +38,7 @@ namespace ProductApi.Controllers
 
             // Gửi thông báo tới SignalR Hub
             var signalRTaskCompletionSource = new TaskCompletionSource<string>();
-            string respone = "";
+            //string respone = "";
             //_hubConnection.On<string>("ReceiveMessage", (receivedMessage) =>
             //{
             //    respone = receivedMessage;
