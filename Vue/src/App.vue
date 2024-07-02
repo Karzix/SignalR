@@ -6,11 +6,16 @@
       <li v-for="message in messages" :key="message">{{ message }}</li>
     </ul>
   </div>
+  <div>
+    <input type="file" multiple @change="handleFileUpload" />
+    <button @click="uploadFiles">Upload Files</button>
+  </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from "vue";
 import * as signalR from "@microsoft/signalr";
+import axios from 'axios';
 
 const product = ref({ name: "" });
 const messages = ref([]);
@@ -42,8 +47,36 @@ const sendProduct = async () => {
     .then((response) => response.json())
     .then((data) => console.log(data));
 };
+
+const files = ref([]);
+
+const handleFileUpload = (event) => {
+  files.value = event.target.files;
+};
+
+const uploadFiles = async () => {
+  if (files.value.length === 0) {
+    alert('No files selected.');
+    return;
+  }
+  const formData = new FormData();
+  for (let i = 0; i < files.value.length; i++) {
+    formData.append('files', files.value[i]);
+  }
+
+  try {
+    const response = await axios.post('https://localhost:7020/api/product/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    });
+    alert('Files uploaded successfully.');
+  } catch (error) {
+    console.error(error);
+  }
+};
 </script>
 
 <style scoped>
-/* Thêm các styles của bạn ở đây nếu cần */
+
 </style>

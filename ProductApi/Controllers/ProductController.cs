@@ -51,5 +51,13 @@ namespace ProductApi.Controllers
             //await signalRTaskCompletionSource.Task;
             return Ok(new { status = signalRTaskCompletionSource.Task.Result });
         }
+
+        [HttpPost("upload")]
+        public async Task<IActionResult> UploadFiles([FromForm] List<IFormFile> files)
+        {
+            
+
+            return Ok("Files uploaded successfully.");
+        }
     }
 }
