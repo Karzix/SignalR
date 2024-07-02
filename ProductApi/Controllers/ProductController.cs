@@ -6,6 +6,7 @@ using ProductApi.Model;
 using RabbitMQ.Client;
 using Microsoft.AspNetCore.SignalR.Client;
 using System.Threading.Tasks;
+using MassTransit;
 
 namespace ProductApi.Controllers
 {
@@ -13,12 +14,11 @@ namespace ProductApi.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly IModel _channel;
-        //private readonly HubConnection _hubConnection;
+        private readonly IPublishEndpoint _publish;
 
-        public ProductController(IModel channel)
+        public ProductController(IPublishEndpoint publish)
         {
-            _channel = channel;
+            _publish = publish;
             //_hubConnection = new HubConnectionBuilder()
             //    .WithUrl("https://localhost:7020/notifications")
             //    .Build();
@@ -31,11 +31,15 @@ namespace ProductApi.Controllers
             var message = JsonSerializer.Serialize(product);
             var body = Encoding.UTF8.GetBytes(message);
 
-            _channel.BasicPublish(exchange: "",
-                                  routingKey: "productQueue",
-                                  basicProperties: null,
-                                  body: body);
-
+            //_channel.BasicPublish(exchange: "",
+            //                      routingKey: "productQueue",
+            //                      basicProperties: null,
+            //                      body: body);
+            _publish.Publish<Product>(new
+            {
+                Code = product.Id,
+                Name = product.Name
+            });
             // Gửi thông báo tới SignalR Hub
             var signalRTaskCompletionSource = new TaskCompletionSource<string>();
             //string respone = "";
