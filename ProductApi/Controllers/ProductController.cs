@@ -26,7 +26,7 @@ namespace ProductApi.Controllers
         }
 
         [HttpPost]
-        public IActionResult Post(Product product)
+        public IActionResult Create(Product product)
         {
             var message = JsonSerializer.Serialize(product);
             var body = Encoding.UTF8.GetBytes(message);
@@ -48,12 +48,11 @@ namespace ProductApi.Controllers
             //    respone = receivedMessage;
             //    if (receivedMessage.Contains(product.Name))
             //    {
-
             //        signalRTaskCompletionSource.SetResult(receivedMessage);
             //    }
             //});
             //await signalRTaskCompletionSource.Task;
-            return Ok(new { status = signalRTaskCompletionSource.Task.Result });
+            return Ok("ok");
         }
     }
 }

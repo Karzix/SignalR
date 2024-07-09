@@ -12,10 +12,11 @@ namespace Consumer
 {
     public class ProductConsumer : IConsumer<Product>
     {
-        public async Task Consume(ConsumeContext<Product> context)
+        public Task Consume(ConsumeContext<Product> context)
         {
             var jsonMessage = JsonConvert.SerializeObject(context.Message);
             Console.WriteLine($"OrderCreated message: {jsonMessage}");
+            return Task.CompletedTask;
         }
     }
 }

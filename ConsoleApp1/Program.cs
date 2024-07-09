@@ -10,41 +10,15 @@ using Consumer;
 
 using (var context = new ProductDbContext())
 {
-    //var factory = new ConnectionFactory() { HostName = "localhost" };
-    //using var connection = factory.CreateConnection();
-    //using var channel = connection.CreateModel();
 
-    //channel.QueueDeclare(queue: "productQueue",
-    //                     durable: false,
-    //                     exclusive: false,
-    //                     autoDelete: false,
-    //                     arguments: null);
-
-    //var hubConnection = new HubConnectionBuilder()
-    //    .WithUrl("https://localhost:7020/notifications")
-    //    .Build();
-
-    //await hubConnection.StartAsync();
-
-    //var consumer = new EventingBasicConsumer(channel);
-    //consumer.Received += async (model, ea) =>
-    //{
-    //    var body = ea.Body.ToArray();
-    //    var message = Encoding.UTF8.GetString(body);
-    //    var product = JsonSerializer.Deserialize<Product>(message);
-    //    product.Id = Guid.NewGuid();
-    //    context.Products.Add(product);
-    //    await context.SaveChangesAsync();
-
-    //    await hubConnection.InvokeAsync("SendMessage", "Product saved: " + product.Name);
-    //};
-
-    //channel.BasicConsume(queue: "productQueue",
-    //                     autoAck: true,
-    //                     consumer: consumer);
     var busControl = Bus.Factory.CreateUsingRabbitMq(cfg =>
     {
-        cfg.ReceiveEndpoint("order-created-event", e =>
+        cfg.Host("localhost", "/", c =>
+        {
+            c.Username("guest");
+            c.Password("guest");
+        });
+        cfg.ReceiveEndpoint("product-queue", e =>
         {
             e.Consumer<ProductConsumer>();
         });
