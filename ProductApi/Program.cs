@@ -25,6 +25,7 @@ builder.Services.AddMassTransit(x =>
         cfg.ConfigureEndpoints(ctx);
     });
 });
+//builder.Services.AddMassTransitHostedService();
 //builder.Services.AddSingleton<IConnectionFactory>(sp => new ConnectionFactory()
 //{
 //    HostName = rabbitMQConfig["HostName"],

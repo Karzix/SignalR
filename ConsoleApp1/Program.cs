@@ -18,7 +18,7 @@ using (var context = new ProductDbContext())
             c.Username("guest");
             c.Password("guest");
         });
-        cfg.ReceiveEndpoint("product-queue", e =>
+        cfg.ReceiveEndpoint("product-event", e =>
         {
             e.Consumer<ProductConsumer>();
         });

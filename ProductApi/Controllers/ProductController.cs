@@ -35,10 +35,10 @@ namespace ProductApi.Controllers
             //                      routingKey: "productQueue",
             //                      basicProperties: null,
             //                      body: body);
-            _publish.Publish<Product>(new
+            _publish.Publish<ProductInterface>(new
             {
-                Code = product.Id,
-                Name = product.Name
+                Id = Guid.NewGuid(),
+                Name = product.Name,
             });
             // Gửi thông báo tới SignalR Hub
             var signalRTaskCompletionSource = new TaskCompletionSource<string>();
